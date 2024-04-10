@@ -78,24 +78,24 @@ public class UserMenu {
             // Prompt the user to input data
             System.out.println("Enter name:");
             String name = scanner.nextLine();
-            details.add(name);
+            details.add("Name:"+name);
             System.out.println("Enter username:");
             String username = scanner.nextLine();
-            details.add(username);
+            details.add("Username:"+username);
             System.out.println("Enter email:");
             String email = scanner.nextLine();
-            details.add(email);
+            details.add("Email:"+email);
             System.out.println("Enter subscription_id:");
             String subscriptionId = scanner.nextLine();
-            details.add(subscriptionId);
+            details.add("Subscription:"+subscriptionId);
             System.out.println("Enter gender:");
             String gender = scanner.nextLine();
-            details.add(gender);
+            details.add("Gender:"+ gender);
             System.out.println("Enter country:");
             String country = scanner.nextLine();
-            details.add(country);
+            details.add("Country:"+ country);
 
-            System.out.println("\n");
+            System.out.println("------------------------");
 
             for(String detail : details){
                 System.out.println(detail);
@@ -112,6 +112,7 @@ public class UserMenu {
             stmt.setString(6, gender);
             stmt.setString(7, country);
             stmt.executeUpdate();
+            System.out.println("------------------------");
             System.out.println("Creating user...");
         } catch (SQLException ex) {
             System.out.println("Failed to create user!");

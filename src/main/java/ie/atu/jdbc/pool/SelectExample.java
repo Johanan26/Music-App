@@ -20,7 +20,7 @@ public class SelectExample {
                 String song = resultSet.getString("song_name");
                 String artist = resultSet.getString("name");
 
-                System.out.println("Song: " + song + ", Artist: " + artist);
+                System.out.println(song + " - " + artist);
             }
         } catch (SQLException e) {
             e.printStackTrace();
