@@ -1,21 +1,15 @@
 package ie.atu.jdbc.application;
-
 import java.sql.*;
 import java.util.Scanner;
-
-public class createUser {
-
-
+public class userMenu {
     public static void main(String[] args) throws SQLException {
-
         // Connect to the database
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/test", "root", "password");
         Scanner scanner = new Scanner(System.in);
         char log;
         System.out.println("Log in or Sign up (L or S):");
-
         log = scanner.nextLine().charAt(0);
-
+        //if a user clicks s, they can sign up and create an account.
         if (log == 'S' || log == 's') {
             try {
                 // Prompt the user to input data
@@ -31,7 +25,6 @@ public class createUser {
                 String gender = scanner.nextLine();
                 System.out.println("Enter country:");
                 String country = scanner.nextLine();
-
                 // Insert a new record into the "users" table
                 PreparedStatement stmt = conn.prepareStatement("INSERT INTO users(user_id,name, username, email, subscription_id, gender, country) VALUES (?, ?, ?, ?, ?, ?, ?)");
                 stmt.setInt(1, getLastInsertId(conn));
@@ -42,22 +35,14 @@ public class createUser {
                 stmt.setString(6, gender);
                 stmt.setString(7, country);
                 stmt.executeUpdate();
-
-                System.out.println("Insert completed successfully.");
+                System.out.println("Creating user...");
             } catch (SQLException ex) {
-                System.out.println("Record insert failed.");
+                System.out.println("Failed to create user!");
                 ex.printStackTrace();
-            } finally {
-                // Close the connection
-                if (conn != null) {
-                    conn.close();
-                }
-                // Close the scanner
-                if (scanner != null) {
-                    scanner.close();
-                }
             }
         }
+        //when a user enters L, they enter their username and password.
+        //if it's in database, login is successful
         else if(log == 'L' || log== 'l'){
             try {
                 // Prompt the user to input data
@@ -65,32 +50,29 @@ public class createUser {
                 String username = scanner.nextLine();
                 System.out.println("Enter password:");
                 String password = scanner.nextLine();
-
-
-                // Insert a new record into the "users" table
-                PreparedStatement stmt = conn.prepareStatement("INSERT INTO users(username, password) VALUES (?, ?)");
+                // Check if the provided credentials exist in the database
+                PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?");
                 stmt.setString(1, username);
                 stmt.setString(2, password);
-
-                stmt.executeUpdate();
-
-                System.out.println("Insert completed successfully.");
+                ResultSet resultSet = stmt.executeQuery();
+                if (resultSet.next()) {
+                    System.out.println("Login successful.");
+                } else {
+                    System.out.println("Invalid username or password.");
+                }
             } catch (SQLException ex) {
-                System.out.println("Record insert failed.");
+                System.out.println("Login failed.");
                 ex.printStackTrace();
-            } finally {
-                // Close the connection
-                if (conn != null) {
-                    conn.close();
-                }
-                // Close the scanner
-                if (scanner != null) {
-                    scanner.close();
-                }
             }
+        }
+        //if a user does not enter L or S when asked
+        else{
+            System.out.println("Invalid option. 'L' for login, or 'S' for sign up.");
         }
     }
 
+    //increments the user_id for signing up
+    //this way it creates another user after the last one in the database and doesn't start at id=0
     private static int getLastInsertId(Connection conn) throws SQLException {
         try (Statement stmt = conn.createStatement()) {
             // Retrieve the maximum value of the user_id column from the users table
@@ -102,4 +84,3 @@ public class createUser {
         }
     }
 }
-
