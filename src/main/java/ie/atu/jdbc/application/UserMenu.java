@@ -5,8 +5,6 @@ import java.util.Scanner;
 public class UserMenu {
     public static void main(String[] args) throws SQLException {
 
-        ArrayList<String> details = new ArrayList<String>();
-
         int x=0;
         // Connect to the database
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/test", "root", "password");
@@ -16,46 +14,7 @@ public class UserMenu {
         log = scanner.nextLine().charAt(0);
         //if a user clicks s, they can sign up and create an account.
         if (log == 'S' || log == 's') {
-            try {
-                // Prompt the user to input data
-                System.out.println("Enter name:");
-                String name = scanner.nextLine();
-                details.add(name);
-                System.out.println("Enter username:");
-                String username = scanner.nextLine();
-                details.add(username);
-                System.out.println("Enter email:");
-                String email = scanner.nextLine();
-                details.add(email);
-                System.out.println("Enter subscription_id:");
-                String subscriptionId = scanner.nextLine();
-                details.add(subscriptionId);
-                System.out.println("Enter gender:");
-                String gender = scanner.nextLine();
-                details.add(gender);
-                System.out.println("Enter country:");
-                String country = scanner.nextLine();
-                details.add(country);
-
-                for(String detail : details){
-                    System.out.println(detail);
-
-                }
-                // Insert a new record into the "users" table
-                PreparedStatement stmt = conn.prepareStatement("INSERT INTO users(user_id,name, username, email, subscription_id, gender, country) VALUES (?, ?, ?, ?, ?, ?, ?)");
-                stmt.setInt(1, getLastInsertId(conn));
-                stmt.setString(2, name);
-                stmt.setString(3, username);
-                stmt.setString(4, email);
-                stmt.setString(5, subscriptionId);
-                stmt.setString(6, gender);
-                stmt.setString(7, country);
-                stmt.executeUpdate();
-                System.out.println("Creating user...");
-            } catch (SQLException ex) {
-                System.out.println("Failed to create user!");
-                ex.printStackTrace();
-            }
+            signUp(conn,scanner);
         }
 
         //when a user enters L, they enter their username and password.
@@ -112,5 +71,53 @@ public class UserMenu {
             return maxId + 1;
         }
     }
+    public static void signUp(Connection conn, Scanner scanner){
+        ArrayList<String> details = new ArrayList<String>();
+
+        try {
+            // Prompt the user to input data
+            System.out.println("Enter name:");
+            String name = scanner.nextLine();
+            details.add(name);
+            System.out.println("Enter username:");
+            String username = scanner.nextLine();
+            details.add(username);
+            System.out.println("Enter email:");
+            String email = scanner.nextLine();
+            details.add(email);
+            System.out.println("Enter subscription_id:");
+            String subscriptionId = scanner.nextLine();
+            details.add(subscriptionId);
+            System.out.println("Enter gender:");
+            String gender = scanner.nextLine();
+            details.add(gender);
+            System.out.println("Enter country:");
+            String country = scanner.nextLine();
+            details.add(country);
+
+            System.out.println("\n");
+
+            for(String detail : details){
+                System.out.println(detail);
+
+            }
+
+            // Insert a new record into the "users" table
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO users(user_id,name, username, email, subscription_id, gender, country) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            stmt.setInt(1, getLastInsertId(conn));
+            stmt.setString(2, name);
+            stmt.setString(3, username);
+            stmt.setString(4, email);
+            stmt.setString(5, subscriptionId);
+            stmt.setString(6, gender);
+            stmt.setString(7, country);
+            stmt.executeUpdate();
+            System.out.println("Creating user...");
+        } catch (SQLException ex) {
+            System.out.println("Failed to create user!");
+            ex.printStackTrace();
+        }
     }
+    }
+
 
