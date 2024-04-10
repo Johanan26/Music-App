@@ -1,8 +1,13 @@
 package ie.atu.jdbc.application;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Scanner;
-public class userMenu {
+public class UserMenu {
     public static void main(String[] args) throws SQLException {
+
+        ArrayList<String> details = new ArrayList<String>();
+
+        int x=0;
         // Connect to the database
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/test", "root", "password");
         Scanner scanner = new Scanner(System.in);
@@ -15,16 +20,27 @@ public class userMenu {
                 // Prompt the user to input data
                 System.out.println("Enter name:");
                 String name = scanner.nextLine();
+                details.add(name);
                 System.out.println("Enter username:");
                 String username = scanner.nextLine();
+                details.add(username);
                 System.out.println("Enter email:");
                 String email = scanner.nextLine();
+                details.add(email);
                 System.out.println("Enter subscription_id:");
                 String subscriptionId = scanner.nextLine();
+                details.add(subscriptionId);
                 System.out.println("Enter gender:");
                 String gender = scanner.nextLine();
+                details.add(gender);
                 System.out.println("Enter country:");
                 String country = scanner.nextLine();
+                details.add(country);
+
+                for(String detail : details){
+                    System.out.println(detail);
+
+                }
                 // Insert a new record into the "users" table
                 PreparedStatement stmt = conn.prepareStatement("INSERT INTO users(user_id,name, username, email, subscription_id, gender, country) VALUES (?, ?, ?, ?, ?, ?, ?)");
                 stmt.setInt(1, getLastInsertId(conn));
@@ -41,6 +57,7 @@ public class userMenu {
                 ex.printStackTrace();
             }
         }
+
         //when a user enters L, they enter their username and password.
         //if it's in database, login is successful
         else if(log == 'L' || log== 'l'){
@@ -50,16 +67,28 @@ public class userMenu {
                 String username = scanner.nextLine();
                 System.out.println("Enter password:");
                 String password = scanner.nextLine();
+
                 // Check if the provided credentials exist in the database
                 PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?");
                 stmt.setString(1, username);
                 stmt.setString(2, password);
                 ResultSet resultSet = stmt.executeQuery();
                 if (resultSet.next()) {
-                    System.out.println("Login successful.");
+                    System.out.println("Login successful.\n");
+                    x=1;
                 } else {
                     System.out.println("Invalid username or password.");
                 }
+
+                if (x==1){
+                    System.out.println("Welcome back, " + username);
+                    System.out.println("1. Playlists");
+                    System.out.println("2. Liked Songs");
+                    System.out.println("3. Account Information");
+                    System.out.println("4. Upgrade Plan");
+                    System.out.println("5. Logout");
+                }
+
             } catch (SQLException ex) {
                 System.out.println("Login failed.");
                 ex.printStackTrace();
@@ -83,4 +112,5 @@ public class userMenu {
             return maxId + 1;
         }
     }
-}
+    }
+
