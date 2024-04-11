@@ -4,14 +4,17 @@ import java.util.ArrayList;
 import java.util.Scanner;
 public class UserMenu {
     public static void main(String[] args) throws SQLException {
-
+        String continuing = "y";
         int x=0;
+
         // Connect to the database
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/test", "root", "password");
         Scanner scanner = new Scanner(System.in);
         char log;
+
         System.out.println("Log in or Sign up (L or S):");
         log = scanner.nextLine().charAt(0);
+
         //if a user clicks s, they can sign up and create an account.
         if (log == 'S' || log == 's') {
             signUp(conn,scanner);
@@ -32,6 +35,7 @@ public class UserMenu {
                 stmt.setString(1, username);
                 stmt.setString(2, password);
                 ResultSet resultSet = stmt.executeQuery();
+
                 if (resultSet.next()) {
                     System.out.println("Login successful.\n");
                     x=1;
@@ -40,7 +44,8 @@ public class UserMenu {
                 }
 
                 if (x==1){
-                    System.out.println("Welcome back, " + username);
+                    while(continuing.equalsIgnoreCase("y")){
+                        System.out.println("Welcome back, " + username);
 
                     String[] menu = Menu.displayMenu();
                     for (String menuHeadings : menu) {
@@ -48,26 +53,30 @@ public class UserMenu {
                     }
 
                     int choice = scanner.nextInt();
-                    switch (choice){
+                    scanner.nextLine();
+                    switch (choice) {
                         case 1:
-                            System.out.println("Homepage");//search for songs and artists
+                            System.out.println("Home");//shows recent playlist or a random liked song and also following
                             break;
                         case 2:
                             System.out.println("Search");//search for songs and artists
                             break;
                         case 3:
-                            System.out.println("Library");//search for songs and artists
+                            System.out.println("Library");//choose to see playlists and liked songs
                             break;
                         case 4:
-                            System.out.println("Settings");//search for songs and artists
+                            System.out.println("Settings");//account information, change plan
                             break;
                         case 5:
-                            System.out.println("Logging out");//search for songs and artists
-                            break;
+                            System.out.println("Logging out...");//ends program
+                            return;
                         default:
                             System.out.println("INVALID ENTRY");//search for songs and artists
                             break;
-
+                    }
+                        System.out.print("Continue? (y/n): ");
+                        continuing = scanner.nextLine();
+                        System.out.println();
                     }
                 }
 
