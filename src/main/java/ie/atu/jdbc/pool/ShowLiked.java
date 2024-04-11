@@ -13,7 +13,7 @@ public class ShowLiked {
                 "JOIN UserLikes ON songs.song_id = UserLikes.song_id " +
                 "JOIN users ON UserLikes.user_id = users.user_id " +
                 "JOIN artists ON songs.artist_id = artists.artist_id " +
-                "WHERE users.user_id = 5";
+                "WHERE users.user_id = 20";
         ArrayList<String> likedSongs = new ArrayList<>();
 
         try (Connection connection = DatabaseUtils.getConnection();
