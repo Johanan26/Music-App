@@ -1,6 +1,5 @@
-package ie.atu.jdbc.test_interface;
+package ie.atu.jdbc.interfacing;
 
-import java.util.ArrayList;
 public class App {
     public static void main(String[] args) {
 // array of Music objects

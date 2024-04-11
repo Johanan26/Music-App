@@ -1,4 +1,4 @@
-package ie.atu.jdbc.test_interface;
+package ie.atu.jdbc.interfacing;
 
 public interface Music {
     String getName();
