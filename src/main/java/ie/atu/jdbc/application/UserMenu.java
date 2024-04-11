@@ -41,11 +41,34 @@ public class UserMenu {
 
                 if (x==1){
                     System.out.println("Welcome back, " + username);
-                    System.out.println("1. Playlists");
-                    System.out.println("2. Liked Songs");
-                    System.out.println("3. Account Information");
-                    System.out.println("4. Upgrade Plan");
-                    System.out.println("5. Logout");
+
+                    String[] menu = Menu.displayMenu();
+                    for (String menuHeadings : menu) {
+                        System.out.println(menuHeadings);
+                    }
+
+                    int choice = scanner.nextInt();
+                    switch (choice){
+                        case 1:
+                            System.out.println("Homepage");//search for songs and artists
+                            break;
+                        case 2:
+                            System.out.println("Search");//search for songs and artists
+                            break;
+                        case 3:
+                            System.out.println("Library");//search for songs and artists
+                            break;
+                        case 4:
+                            System.out.println("Settings");//search for songs and artists
+                            break;
+                        case 5:
+                            System.out.println("Logging out");//search for songs and artists
+                            break;
+                        default:
+                            System.out.println("INVALID ENTRY");//search for songs and artists
+                            break;
+
+                    }
                 }
 
             } catch (SQLException ex) {
