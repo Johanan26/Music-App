@@ -15,7 +15,7 @@ public class Settings{
             stmt.executeUpdate();
 
 
-            System.out.println("Updated Name..");
+            System.out.println("Updated Name...");
         } catch (SQLException ex) {
 
             System.out.println("Failed to update name");
@@ -33,7 +33,7 @@ public class Settings{
             stmt.executeUpdate();
 
 
-            System.out.println("Updated Username..");
+            System.out.println("Updated Username...");
         } catch (SQLException ex) {
 
             System.out.println("Failed to update username");
@@ -50,7 +50,7 @@ public class Settings{
             stmt.executeUpdate();
 
 
-            System.out.println("Updated Password..");
+            System.out.println("Updated Password...");
         } catch (SQLException ex) {
 
             System.out.println("Failed to update Password");
@@ -66,7 +66,7 @@ public class Settings{
             stmt.executeUpdate();
 
 
-            System.out.println("Updated Email..");
+            System.out.println("Updated Email...");
         } catch (SQLException ex) {
 
             System.out.println("Failed to update Email");
@@ -82,21 +82,46 @@ public class Settings{
             stmt.executeUpdate();
 
 
-            System.out.println("Updated Subscription..");
+            System.out.println("Updated Subscription...");
         } catch (SQLException ex) {
 
             System.out.println("Failed to update Subscription");
             ex.printStackTrace();
         }
     }
-    // Helper method to get the ID of the last inserted record
-    private static int getLastInsertId (Connection conn) throws SQLException {
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT LAST_INSERT_ID()");
-        rs.next();
-        int id = rs.getInt(1);
-        rs.close();
-        stmt.close();
-        return id;
-    }
+    public static void deleteAccount(Connection conn,String username) {
+        try {
+
+            PreparedStatement UserId = conn.prepareStatement("SELECT user_id FROM users WHERE username = ?");
+            UserId.setString(1, username);
+            ResultSet userIdResult = UserId.executeQuery();
+
+            if (userIdResult.next()) {
+                int userId = userIdResult.getInt("user_id");
+
+                // Delete the user_id from all tables one at tiem
+                PreparedStatement deleteLiked = conn.prepareStatement("DELETE FROM userlikes WHERE user_id = ?");
+                deleteLiked.setInt(1, userId);
+                deleteLiked.executeUpdate();
+
+                PreparedStatement deletePlaylistSongs = conn.prepareStatement("DELETE FROM user_playlist_songs WHERE user_playlist_id IN (SELECT user_playlist_id FROM user_playlist WHERE user_id = ?)");
+                deletePlaylistSongs.setInt(1, userId);
+                deletePlaylistSongs.executeUpdate();
+
+                PreparedStatement deletePlaylist = conn.prepareStatement("DELETE FROM user_playlist WHERE user_id = ?");
+                deletePlaylist.setInt(1, userId);
+                deletePlaylist.executeUpdate();
+
+                PreparedStatement deleteAccountStmt = conn.prepareStatement("DELETE FROM users WHERE username = ?");
+                deleteAccountStmt.setString(1, username);
+                deleteAccountStmt.executeUpdate();
+
+                System.out.println("Successfully Deleted Account...");
+            }
+        } catch (SQLException ex) {
+            // Print an error message if deletion fails
+            System.out.println("Failed to delete account. ");
+            ex.printStackTrace();
+        }
+   }
 }

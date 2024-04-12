@@ -84,7 +84,7 @@ public class UserMenu {
                             break;
                         case 4:
                             System.out.println("Settings");//account information, change plan
-                            System.out.println("Update Name (1) | Update Username (2) | Update Passwords (3) | Update Email (4) | Update Subscription (5)");//choose to see playlists and liked songs
+                            System.out.println("Update Name (1) | Update Username (2) | Update Passwords (3) | Update Email (4) | Update Subscription (5) | DELETE ACCOUNT (6)");//choose to see playlists and liked songs
                             int setting = scanner.nextInt();
                             scanner.nextLine();
 
@@ -118,6 +118,10 @@ public class UserMenu {
                                         System.out.println("Enter your Subscription_id:");
                                         String updatedSubscription_id = scanner.nextLine();
                                         Settings.updateSubscription_id(conn,updatedSubscription_id,username);
+                                        break;
+                                    case 6:
+                                        System.out.println("Delete Account!");
+                                        Settings.deleteAccount(conn,username);
                                         break;
                                     default:
                                         System.out.println("Invalid option");
