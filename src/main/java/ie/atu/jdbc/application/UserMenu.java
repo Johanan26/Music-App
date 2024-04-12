@@ -84,7 +84,7 @@ public class UserMenu {
                             break;
                         case 4:
                             System.out.println("Settings");//account information, change plan
-                            System.out.println("Update Name (1) | Update Username (2)");//choose to see playlists and liked songs
+                            System.out.println("Update Name (1) | Update Username (2) | Update Passwords (3)");//choose to see playlists and liked songs
                             int setting = scanner.nextInt();
                             scanner.nextLine();
 
@@ -97,7 +97,15 @@ public class UserMenu {
                                         break;
                                     case 2:
                                         System.out.println("Change username");
-
+                                        System.out.println("Enter your new username:");
+                                        String updatedUsername = scanner.nextLine();
+                                        Settings.updateUsername(conn,updatedUsername,username);
+                                        break;
+                                    case 3:
+                                        System.out.println("Change Password");
+                                        System.out.println("Enter your new Password:");
+                                        String updatedPassword = scanner.nextLine();
+                                        Settings.updatePassword(conn,updatedPassword,username);
                                         break;
                                     default:
                                         System.out.println("Invalid option");
