@@ -90,10 +90,11 @@ public class UserMenu {
 
                                 switch (setting) {
                                     case 1:
-                                        System.out.println("Change name");
-                                        System.out.println("Enter your new name:");
-                                        String updatedName = scanner.nextLine();
-                                       Settings.updateName(conn,updatedName,username);
+                                        System.out.println("Home");//shows recent playlist or a random liked song and also following
+                                        Home home = new Home();
+                                        home.showSongs();
+                                        System.out.println();//shows recent playlist or a random liked song and also following
+                                        home.showAlbums();
                                         break;
                                     case 2:
                                         System.out.println("Change username");
