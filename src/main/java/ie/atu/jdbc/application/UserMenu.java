@@ -1,4 +1,5 @@
 package ie.atu.jdbc.application;
+import com.sun.source.tree.CaseTree;
 import ie.atu.jdbc.pool.DatabaseUtils;
 
 import java.sql.*;
@@ -7,7 +8,9 @@ import java.util.Scanner;
 public class UserMenu {
     public static void main(String[] args) throws SQLException {
         String continuing = "y";
+        int y=0;
         int x=0;
+        int logout = 0;
 
         // Connect to the database
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/test", "root", "password");
@@ -68,15 +71,44 @@ public class UserMenu {
                             System.out.println("Liked Songs (1) | Playlists (2)");//choose to see playlists and liked songs
                             int option = scanner.nextInt();
                             scanner.nextLine();
+                            if(option==1){
+                                ShowLiked.showLikedSongs(username);
+                            }
+                            else if(option ==2){
+                                ShowPlaylist.ShowPlaylist(username);
+                            }
+                            else{
+                                System.out.println("Invalid Entry, Try again");
+                            }
 
-                            ShowLiked.showLikedSongs(username);
                             break;
                         case 4:
                             System.out.println("Settings");//account information, change plan
+                            System.out.println("Update Name (1) | Update Username (2)");//choose to see playlists and liked songs
+                            int setting = scanner.nextInt();
+                            scanner.nextLine();
+
+                                switch (setting) {
+                                    case 1:
+                                        System.out.println("Change name");
+                                        System.out.println("Enter your new name:");
+                                        String updatedName = scanner.nextLine();
+                                       Settings.updateName(conn,updatedName,username);
+                                        break;
+                                    case 2:
+                                        System.out.println("Change username");
+
+                                        break;
+                                    default:
+                                        System.out.println("Invalid option");
+                                        break;
+                                }
+
                             break;
                         case 5:
                             System.out.println("Logging out...");//ends program
                             return;
+
                         default:
                             System.out.println("INVALID ENTRY");//search for songs and artists
                             break;
