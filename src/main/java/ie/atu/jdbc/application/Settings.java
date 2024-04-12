@@ -22,8 +22,41 @@ public class Settings{
             ex.printStackTrace();
         }
 
+
+    }
+    public static void updateUsername(Connection conn,String updatedUsername,String username) {
+        try {
+            // Insert a new record into the "users" table
+            PreparedStatement stmt = conn.prepareStatement("UPDATE users SET username = ? WHERE username = ?");
+            stmt.setString(1, updatedUsername);
+            stmt.setString(2, username);
+            stmt.executeUpdate();
+
+
+            System.out.println("Updated Username..");
+        } catch (SQLException ex) {
+
+            System.out.println("Failed to update username");
+            ex.printStackTrace();
+        }
     }
 
+    public static void updatePassword(Connection conn,String updatedPassword,String username) {
+        try {
+            // Insert a new record into the "users" table
+            PreparedStatement stmt = conn.prepareStatement("UPDATE users SET password = ? WHERE username = ?");
+            stmt.setString(1, updatedPassword);
+            stmt.setString(2, username);
+            stmt.executeUpdate();
+
+
+            System.out.println("Updated Password..");
+        } catch (SQLException ex) {
+
+            System.out.println("Failed to update Password");
+            ex.printStackTrace();
+        }
+    }
     // Helper method to get the ID of the last inserted record
     private static int getLastInsertId (Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
