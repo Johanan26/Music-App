@@ -84,7 +84,7 @@ public class UserMenu {
                             break;
                         case 4:
                             System.out.println("Settings");//account information, change plan
-                            System.out.println("Update Name (1) | Update Username (2) | Update Passwords (3)");//choose to see playlists and liked songs
+                            System.out.println("Update Name (1) | Update Username (2) | Update Passwords (3) | Update Email (4) | Update Subscription (5)");//choose to see playlists and liked songs
                             int setting = scanner.nextInt();
                             scanner.nextLine();
 
@@ -106,6 +106,18 @@ public class UserMenu {
                                         System.out.println("Enter your new Password:");
                                         String updatedPassword = scanner.nextLine();
                                         Settings.updatePassword(conn,updatedPassword,username);
+                                        break;
+                                    case 4:
+                                        System.out.println("Change Email");
+                                        System.out.println("Enter your new Email:");
+                                        String updatedEmail = scanner.nextLine();
+                                        Settings.updateEmail(conn,updatedEmail,username);
+                                        break;
+                                    case 5:
+                                        System.out.println("Change Subscription");
+                                        System.out.println("Enter your Subscription_id:");
+                                        String updatedSubscription_id = scanner.nextLine();
+                                        Settings.updateSubscription_id(conn,updatedSubscription_id,username);
                                         break;
                                     default:
                                         System.out.println("Invalid option");
