@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class UserMenu {
     public static void main(String[] args) throws SQLException {
         String continuing = "y";
+        int y=0;
         int x=0;
 
         // Connect to the database
@@ -68,8 +69,16 @@ public class UserMenu {
                             System.out.println("Liked Songs (1) | Playlists (2)");//choose to see playlists and liked songs
                             int option = scanner.nextInt();
                             scanner.nextLine();
+                            if(option==1){
+                                ShowLiked.showLikedSongs(username);
+                            }
+                            else if(option ==2){
+                                ShowPlaylist.ShowPlaylist(username);
+                            }
+                            else{
+                                System.out.println("Invalid Entry, Try again");
+                            }
 
-                            ShowLiked.showLikedSongs(username);
                             break;
                         case 4:
                             System.out.println("Settings");//account information, change plan
