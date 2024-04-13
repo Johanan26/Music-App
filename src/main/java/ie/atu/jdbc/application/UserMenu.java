@@ -13,7 +13,7 @@ public class UserMenu {
         int logout = 0;
 
         // Connect to the database
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/test", "root", "password");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/test", "root", "root");
         Scanner scanner = new Scanner(System.in);
         char log;
 
@@ -68,7 +68,19 @@ public class UserMenu {
                             home.showAlbums();
                             break;
                         case 2:
-                            System.out.println("Search");//search for songs and artists
+                            System.out.println("Search");
+                            System.out.println("Enter song name:");
+                            String songName = scanner.nextLine();
+                            Search.searchSongs(songName);
+                            System.out.println();//shows recent playlist or a random liked song and also following
+                            System.out.println("Enter album name:");
+                            String albumName = scanner.nextLine();
+                            Search.searchAlbums(albumName);
+                            System.out.println();
+                            System.out.println("Enter artist name:");
+                            String artistName = scanner.nextLine();
+                            Search.searchArtists(artistName);
+                            System.out.println();
                             break;
                         case 3:
                             System.out.println("Library");//choose to see playlists and liked songs
@@ -88,7 +100,7 @@ public class UserMenu {
                             break;
                         case 4:
                             System.out.println("Settings");//account information, change plan
-                            System.out.println("Update Name (1) | Update Username (2) | Update Passwords (3) | Update Email (4) | Update Subscription (5) | DELETE ACCOUNT (6)");//choose to see playlists and liked songs
+                            System.out.println("Update Name (1) | Update Username (2) | Update Passwords (3) | Update Email (4) | Update Subscription (5) | Back to menu (6) | DELETE ACCOUNT (7)");//choose to see playlists and liked songs
                             int setting = scanner.nextInt();
                             scanner.nextLine();
 
@@ -124,6 +136,10 @@ public class UserMenu {
                                         Settings.updateSubscription_id(conn,updatedSubscription_id,username);
                                         break;
                                     case 6:
+                                        System.out.println("Back to menu");
+
+
+                                    case 7:
                                         System.out.println("Delete Account!");
                                         Settings.deleteAccount(conn,username);
                                         break;
