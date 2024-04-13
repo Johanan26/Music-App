@@ -51,6 +51,7 @@ public class UserMenu {
                 if (x==1){
                     while(continuing.equalsIgnoreCase("y")){
                         System.out.println("Welcome back, " + username);
+                        System.out.println("------------------------");
 
                     String[] menu = Menu.displayMenu();
                     for (String menuHeadings : menu) {
@@ -68,20 +69,22 @@ public class UserMenu {
                             home.showAlbums();
                             break;
                         case 2:
-                            SearchMenu search = new SearchMenu();
                             System.out.println("Search");
-                            System.out.println("Enter song name:");
-                            String songName = scanner.nextLine();
-                            search.searchSongs(songName);
-                            System.out.println();//shows recent playlist or a random liked song and also following
-                            System.out.println("Enter album name:");
-                            String albumName = scanner.nextLine();
-                            search.searchAlbums(albumName);
-                            System.out.println();
-                            System.out.println("Enter artist name:");
-                            String artistName = scanner.nextLine();
-                            search.searchArtists(artistName);
-                            System.out.println();
+                            System.out.println("What would you like to listen to? ");
+                            String userSearch = scanner.nextLine();
+                            SearchMenu searchMenu = new SearchMenu();
+                            ArrayList<String> results = searchMenu.searchSong(conn,scanner,userSearch);
+
+                            if(results.size()==0){
+                                System.out.println("No results found\n");
+                            }
+                            else {
+                                System.out.println("Liked Songs:");
+                                for (String result : results){
+                                    System.out.println(result);
+                                }
+                            }
+
                             break;
                         case 3:
                             System.out.println("Library");//choose to see playlists and liked songs
@@ -139,7 +142,7 @@ public class UserMenu {
                                     case 6:
                                         System.out.println("Back to menu");
 
-
+                                        break;
                                     case 7:
                                         System.out.println("Delete Account!");
                                         Settings.deleteAccount(conn,username);

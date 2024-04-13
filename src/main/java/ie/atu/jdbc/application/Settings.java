@@ -1,9 +1,5 @@
 package ie.atu.jdbc.application;
-
-import ie.atu.jdbc.pool.DatabaseUtils;
-
 import java.sql.*;
-import java.util.Scanner;
 
 public class Settings{
    public static void updateName(Connection conn,String updatedName,String username) {
