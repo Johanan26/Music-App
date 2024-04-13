@@ -1,107 +1,31 @@
 package ie.atu.jdbc.application;
 import ie.atu.jdbc.pool.DatabaseUtils;
-
 import java.sql.Connection;
-
 import java.sql.PreparedStatement;
-
 import java.sql.ResultSet;
-
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
-public class SearchMenu {
+public class SearchMenu implements Search{
+    @Override
+    public ArrayList<String> searchSong(Connection conn, Scanner scanner, String userSearch) throws SQLException {
+        ArrayList<String> results = new ArrayList<>();
 
-    public static void searchSongs(String songName) {
+        PreparedStatement stmt = conn.prepareStatement("SELECT songs.song_name, artists.name " +
+                "FROM songs " +
+                "JOIN artists ON songs.artist_id = artists.artist_id " +
+                "WHERE (songs.song_name LIKE ? OR artists.name LIKE ?)");
+        stmt.setString(1,"%"+userSearch+"%");
+        stmt.setString(2,"%"+userSearch+"%");
 
-        String searchSongs = "SELECT song_name FROM songs WHERE song_name = ?";
-
-        try (Connection connection = DatabaseUtils.getConnection();
-
-             PreparedStatement preparedStatement = connection.prepareStatement(searchSongs)) {
-
-            preparedStatement.setString(1, songName);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-
-                while (resultSet.next()) {
-
-                    String song = resultSet.getString("song_name");
-
-                    System.out.println(song + " - ");
-
-                }
-
-            }
-
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-
-        }
-
+        ResultSet resultSet = stmt.executeQuery();
+    while (resultSet.next()){
+        String songName = resultSet.getString("song_name");
+        String artistName = resultSet.getString("name");
+        results.add(songName + " - "+ artistName);
+         }
+    return results;
     }
 
-    public static void searchAlbums(String albumName) {
-
-        String searchAlbums = "SELECT album_name FROM Albums WHERE album_name = ?";
-
-        try (Connection connection = DatabaseUtils.getConnection();
-
-             PreparedStatement preparedStatement = connection.prepareStatement(searchAlbums)) {
-
-            preparedStatement.setString(1, albumName);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-
-                while (resultSet.next()) {
-
-                    String album = resultSet.getString("album_name");
-
-                    System.out.println(album + " - ");
-
-                }
-
-            }
-
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-
-        }
-
-    }
-
-    public static void searchArtist(String artistName) {
-
-        String searchArtist = "SELECT artist_name FROM Artist WHERE artist_name = ?";
-
-        try (Connection connection = DatabaseUtils.getConnection();
-
-             PreparedStatement preparedStatement = connection.prepareStatement(searchArtist)) {
-
-            preparedStatement.setString(1, artistName);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-
-                while (resultSet.next()) {
-
-                    String artist = resultSet.getString("artist_name");
-
-                    System.out.println(artist + " - ");
-
-                }
-
-            }
-
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-
-        }
-
-    }
-
-    public void searchArtists(String artistName) {
-
-    }
 }
