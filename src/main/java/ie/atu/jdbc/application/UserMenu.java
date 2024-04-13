@@ -13,7 +13,7 @@ public class UserMenu {
         int logout = 0;
 
         // Connect to the database
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/test", "root", "root");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/test", "root", "password");
         Scanner scanner = new Scanner(System.in);
         char log;
 
@@ -68,18 +68,19 @@ public class UserMenu {
                             home.showAlbums();
                             break;
                         case 2:
+                            SearchMenu search = new SearchMenu();
                             System.out.println("Search");
                             System.out.println("Enter song name:");
                             String songName = scanner.nextLine();
-                            Search.searchSongs(songName);
+                            search.searchSongs(songName);
                             System.out.println();//shows recent playlist or a random liked song and also following
                             System.out.println("Enter album name:");
                             String albumName = scanner.nextLine();
-                            Search.searchAlbums(albumName);
+                            search.searchAlbums(albumName);
                             System.out.println();
                             System.out.println("Enter artist name:");
                             String artistName = scanner.nextLine();
-                            Search.searchArtists(artistName);
+                            search.searchArtists(artistName);
                             System.out.println();
                             break;
                         case 3:
@@ -91,7 +92,7 @@ public class UserMenu {
                                 ShowLiked.showLikedSongs(username);
                             }
                             else if(option ==2){
-                                ShowPlaylist.ShowPlaylist(username);
+                                ShowPlaylist.ShowPlaylist(username,scanner);
                             }
                             else{
                                 System.out.println("Invalid Entry, Try again");

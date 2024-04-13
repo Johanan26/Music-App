@@ -1,3 +1,4 @@
+package ie.atu.jdbc.application;
 import ie.atu.jdbc.pool.DatabaseUtils;
 
 import java.sql.Connection;
@@ -8,9 +9,9 @@ import java.sql.ResultSet;
 
 import java.sql.SQLException;
 
-public class Search {
+public class SearchMenu {
 
-    public void searchSongs(String songName) {
+    public static void searchSongs(String songName) {
 
         String searchSongs = "SELECT song_name FROM songs WHERE song_name = ?";
 
@@ -40,7 +41,7 @@ public class Search {
 
     }
 
-    public void searchAlbums(String albumName) {
+    public static void searchAlbums(String albumName) {
 
         String searchAlbums = "SELECT album_name FROM Albums WHERE album_name = ?";
 
@@ -70,7 +71,7 @@ public class Search {
 
     }
 
-    public void searchArtist(String artistName) {
+    public static void searchArtist(String artistName) {
 
         String searchArtist = "SELECT artist_name FROM Artist WHERE artist_name = ?";
 
@@ -100,4 +101,7 @@ public class Search {
 
     }
 
+    public void searchArtists(String artistName) {
+
+    }
 }
