@@ -9,7 +9,6 @@ public class UserMenu {
     public static void main(String[] args) throws SQLException {
         String continuing = "y";
         int x=0;
-        int logout = 0;
 
         // Connect to the database
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/test", "root", "password");
@@ -82,16 +81,32 @@ public class UserMenu {
                                     System.out.println(result);
                                 }
 
-                                System.out.println("Select a song to add to your liked songs (enter the corresponding index): ");
+                                System.out.println("Select a song to add to your liked songs or playlist: ");
                                 int selectedSongIndex = scanner.nextInt();
                                 scanner.nextLine(); // Consume newline character
 
                                 if (selectedSongIndex >= 1 && selectedSongIndex <= results.size()) {
+                                    char songAddChoice = 0;
+
                                     String selectedSong = results.get(selectedSongIndex - 1); // Adjust index to 0-based
-                                    searchMenu.addSongToLikes(conn, getUserId(username), selectedSong);
+
+                                    System.out.println("Liked songs(l), playlists(p):");
+                                    songAddChoice = scanner.nextLine().charAt(0);
+
+                                    if (songAddChoice=='l' || songAddChoice == 'L'){
+                                        searchMenu.addSongToLikes(conn, getUserId(username), selectedSong);
+
+                                    }else if (songAddChoice == 'p'|| songAddChoice=='P'){
+                                        SearchMenu.SelectPlaylist(username,selectedSong,scanner);
+                                    }
+                                    else{
+                                        System.out.println("Invalid Character.");
+                                    }
+
                                 } else {
                                     System.out.println("Invalid selection.");
                                 }
+
                             }
                             break;
                         case 3:

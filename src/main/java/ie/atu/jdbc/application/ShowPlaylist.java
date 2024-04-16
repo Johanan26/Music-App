@@ -56,10 +56,13 @@ public class ShowPlaylist {
     }
 
     private static void showPlaylistSongs(String playlistID) {
-        String selectSongsSQL = "SELECT songs.song_name " +
+        String selectSongsSQL = "SELECT songs.song_name, artists.name " +
                 "FROM user_playlist_songs " +
                 "JOIN songs ON user_playlist_songs.song_id = songs.song_id " +
+                "JOIN artists ON songs.artist_id = artists.artist_id " +
                 "WHERE user_playlist_songs.user_playlist_id = ?";
+        ArrayList<String> playlistSongs = new ArrayList<>();
+
 
         try (Connection connection = DatabaseUtils.getConnection();
              PreparedStatement statement = connection.prepareStatement(selectSongsSQL)) {
@@ -70,7 +73,15 @@ public class ShowPlaylist {
             System.out.println("Songs in the playlist:");
             while (resultSetSongs.next()) {
                 String songName = resultSetSongs.getString("song_name");
-                System.out.println("- " + songName);
+                String artistName = resultSetSongs.getString("name");
+                playlistSongs.add(songName + " - "+ artistName);
+            }
+            if(playlistSongs.size()==0){
+                System.out.println("No songs in playlist");
+            }else{
+                for(String playlistSong : playlistSongs){
+                    System.out.println(playlistSong);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
