@@ -8,7 +8,6 @@ import java.util.Scanner;
 public class UserMenu {
     public static void main(String[] args) throws SQLException {
         String continuing = "y";
-        int y=0;
         int x=0;
         int logout = 0;
 
@@ -22,7 +21,7 @@ public class UserMenu {
 
         //if a user clicks s, they can sign up and create an account.
         if (log == 'S' || log == 's') {
-            signUp(conn,scanner);
+            SignUp.signUp(conn,scanner);
         }
 
         //when a user enters L, they enter their username and password.
@@ -73,18 +72,27 @@ public class UserMenu {
                             System.out.println("What would you like to listen to? ");
                             String userSearch = scanner.nextLine();
                             SearchMenu searchMenu = new SearchMenu();
-                            ArrayList<String> results = searchMenu.searchSong(conn,scanner,userSearch);
+                            ArrayList<String> results = searchMenu.searchSong(conn, scanner, userSearch);
 
-                            if(results.size()==0){
+                            if (results.size() == 0) {
                                 System.out.println("No results found\n");
-                            }
-                            else {
-                                System.out.println("Liked Songs:");
-                                for (String result : results){
+                            } else {
+                                System.out.println("Results");
+                                for (String result : results) {
                                     System.out.println(result);
                                 }
-                            }
 
+                                System.out.println("Select a song to add to your liked songs (enter the corresponding index): ");
+                                int selectedSongIndex = scanner.nextInt();
+                                scanner.nextLine(); // Consume newline character
+
+                                if (selectedSongIndex >= 1 && selectedSongIndex <= results.size()) {
+                                    String selectedSong = results.get(selectedSongIndex - 1); // Adjust index to 0-based
+                                    searchMenu.addSongToLikes(conn, getUserId(username), selectedSong);
+                                } else {
+                                    System.out.println("Invalid selection.");
+                                }
+                            }
                             break;
                         case 3:
                             System.out.println("Library");//choose to see playlists and liked songs
@@ -178,65 +186,16 @@ public class UserMenu {
         }
     }
 
-    //increments the user_id for signing up
-    //this way it creates another user after the last one in the database and doesn't start at id=0
-    private static int getLastInsertId(Connection conn) throws SQLException {
-        try (Statement stmt = conn.createStatement()) {
-            // Retrieve the maximum value of the user_id column from the users table
-            ResultSet rs = stmt.executeQuery("SELECT MAX(user_id) FROM users");
-            rs.next();
-            int maxId = rs.getInt(1);
-            // Increment the maximum value by 1 to get the next available user_id
-            return maxId + 1;
+
+    private static int getUserId(String username) throws SQLException {
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/test", "root", "password");
+        PreparedStatement stmt = conn.prepareStatement("SELECT user_id FROM users WHERE username = ?");
+        stmt.setString(1, username);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("user_id");
         }
-    }
-    public static void signUp(Connection conn, Scanner scanner){
-        ArrayList<String> details = new ArrayList<String>();
-
-        try {
-            // Prompt the user to input data
-            System.out.println("Enter name:");
-            String name = scanner.nextLine();
-            details.add("Name:"+name);
-            System.out.println("Enter username:");
-            String username = scanner.nextLine();
-            details.add("Username:"+username);
-            System.out.println("Enter email:");
-            String email = scanner.nextLine();
-            details.add("Email:"+email);
-            System.out.println("Enter subscription_id:");
-            String subscriptionId = scanner.nextLine();
-            details.add("Subscription:"+subscriptionId);
-            System.out.println("Enter gender:");
-            String gender = scanner.nextLine();
-            details.add("Gender:"+ gender);
-            System.out.println("Enter country:");
-            String country = scanner.nextLine();
-            details.add("Country:"+ country);
-
-            System.out.println("------------------------");
-
-            for(String detail : details){
-                System.out.println(detail);
-
-            }
-
-            // Insert a new record into the "users" table
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO users(user_id,name, username, email, subscription_id, gender, country) VALUES (?, ?, ?, ?, ?, ?, ?)");
-            stmt.setInt(1, getLastInsertId(conn));
-            stmt.setString(2, name);
-            stmt.setString(3, username);
-            stmt.setString(4, email);
-            stmt.setString(5, subscriptionId);
-            stmt.setString(6, gender);
-            stmt.setString(7, country);
-            stmt.executeUpdate();
-            System.out.println("------------------------");
-            System.out.println("Creating user...");
-        } catch (SQLException ex) {
-            System.out.println("Failed to create user!");
-            ex.printStackTrace();
-        }
+        return -1; // Return -1 if user not found
     }
     }
 
