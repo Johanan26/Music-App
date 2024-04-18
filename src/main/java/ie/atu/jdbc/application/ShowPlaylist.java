@@ -175,6 +175,70 @@ public class ShowPlaylist {
             e.printStackTrace();
         }
     }
+    public static void removeSong(String Playlist_id, Scanner scanner){
+        String selectSongsSQL = "SELECT songs.song_id,songs.song_name, artists.name " +
+                "FROM songs " +
+                "JOIN UserLikes ON songs.song_id = UserLikes.song_id " +
+                "JOIN users ON UserLikes.user_id = users.user_id " +
+                "JOIN artists ON songs.artist_id = artists.artist_id " +
+                "WHERE users.username = ?";
+
+        ArrayList<Integer> songIds = new ArrayList<>();
+        ArrayList<String> PlaylistSongs = new ArrayList<>();
+
+        try (Connection connection = DatabaseUtils.getConnection();
+             PreparedStatement statement = connection.prepareStatement(selectSongsSQL)) {
+            statement.setString(1, Playlist_id);
+            ResultSet resultSetSongs = statement.executeQuery();
+            while (resultSetSongs.next()) {
+                int songID = resultSetSongs.getInt("song_id");
+                String songName = resultSetSongs.getString("song_name");
+                String artistName = resultSetSongs.getString("name");
+                PlaylistSongs.add(songName + " - " + artistName);
+                songIds.add(songID);
+            }
+            if (PlaylistSongs.size() == 0) {
+                System.out.println("No songs in playlist");
+            } else {
+                System.out.println("Liked songs:");
+                for (int i = 0; i < PlaylistSongs.size();i++) {
+                    System.out.println((i+1)+". "+PlaylistSongs.get(i));
+                }
+                System.out.println("Which song do you want to remove?(any key to exit)");
+
+                int songChoice = scanner.nextInt();
+                scanner.nextLine();
+                if (songChoice > 0 && songChoice <= PlaylistSongs.size()) {
+                    int selectedSongId = songIds.get(songChoice - 1);
+
+                    String deleteSongSQL = "DELETE FROM user_playlist_songs " +
+                            "WHERE user_playlist_id = ? " +
+                            "AND song_id = ?";
+                    try (PreparedStatement deleteSongStatement = connection.prepareStatement(deleteSongSQL)) {
+                        int playlistid = getPlaylistname(Playlist_id);
+                        if(playlistid != -1){
+                            deleteSongStatement.setInt(1, playlistid);
+                            deleteSongStatement.setString(2, String.valueOf(selectedSongId));
+                            int deletedSong = deleteSongStatement.executeUpdate();
+
+                            if (deletedSong > 0) {
+                                System.out.println("Song removed");
+                            } else {
+                                System.out.println("Failed to remove limed song");
+                            }
+                        }
+                        else{System.out.println("User not found");
+                        }
+
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     public static void deletePlaylist(String playlistID, Scanner scanner) {
         String deleteSongsSQL = "DELETE FROM user_playlist_songs WHERE user_playlist_id =?";
         String deletePlaylistSQL = "DELETE FROM user_playlist WHERE user_playlist_id =?";
