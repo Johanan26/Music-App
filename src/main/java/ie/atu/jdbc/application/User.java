@@ -5,16 +5,18 @@ public class User {
     private String name;
     private String username;
     private String email;
+    private String password;
     private String subscriptionId;
     private String gender;
     private String country;
 
 
     //constructor
-    public User(String name, String username, String email, String subscriptionId, String gender, String country){
+    public User(String name, String username, String email,String password, String subscriptionId, String gender, String country){
         this.name=name;
         this.username=username;
         this.email=email;
+        this.password=password;
         this.subscriptionId=subscriptionId;
         this.gender=gender;
         this.country=country;
@@ -42,6 +44,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getSubscriptionId() {
