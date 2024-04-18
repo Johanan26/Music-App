@@ -5,8 +5,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 public class SignUp extends User {
-    public SignUp(String name, String username, String email, String subscriptionId, String gender, String country) {
-        super(name, username, email, subscriptionId, gender, country);
+    public SignUp(String name, String username, String email,String password, String subscriptionId, String gender, String country) {
+        super(name, username, email,password, subscriptionId, gender, country);
     }
 
     // This method handles the sign-up process
@@ -24,6 +24,9 @@ public class SignUp extends User {
             System.out.println("Enter email:");
             String email = scanner.nextLine();
             details.add("Email:"+email);
+            System.out.println("Enter password:");
+            String password = scanner.nextLine();
+            details.add("Password:"+password);
             System.out.println("Enter subscription_id:");
             String subscriptionId = scanner.nextLine();
             details.add("Subscription:"+subscriptionId);
@@ -42,17 +45,19 @@ public class SignUp extends User {
             }
 
             // Insert a new record into the "users" table
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO users(user_id,name, username, email, subscription_id, gender, country) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO users(user_id,name, username, email,password, subscription_id, gender, country) VALUES (?, ?, ?,?, ?, ?, ?, ?)");
             stmt.setInt(1, getLastInsertId(conn));
             stmt.setString(2, name);
             stmt.setString(3, username);
             stmt.setString(4, email);
-            stmt.setString(5, subscriptionId);
-            stmt.setString(6, gender);
-            stmt.setString(7, country);
+            stmt.setString(5, password);
+            stmt.setString(6, subscriptionId);
+            stmt.setString(7, gender);
+            stmt.setString(8, country);
             stmt.executeUpdate();
             System.out.println("------------------------");
             System.out.println("Creating user...");
+
         } catch (SQLException ex) {
             System.out.println("Failed to create user!");
             ex.printStackTrace();
