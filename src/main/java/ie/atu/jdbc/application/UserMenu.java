@@ -20,7 +20,7 @@ public class UserMenu {
             if (log == 'S' || log == 's') {
                 SignUp.signUp(conn, scanner);
                 log = 'l';
-                System.out.println("Log in (L):");
+                System.out.println("Log in or Sign up (L or S):");
 
             }
 
@@ -115,7 +115,7 @@ public class UserMenu {
                                     int option = scanner.nextInt();
                                     scanner.nextLine();
                                     if (option == 1) {
-                                        ShowLiked.showLikedSongs(username);
+                                        ShowLiked.showLikedSongs(username,scanner);
                                     } else if (option == 2) {
                                         ShowPlaylist.ShowPlaylist(username, scanner);
                                     } else if (option == 3) {
@@ -128,7 +128,7 @@ public class UserMenu {
                                     break;
                                 case 4:
                                     System.out.println("Settings");//account information, change plan
-                                    System.out.println("Update Name (1) | Update Username (2) | Update Passwords (3) | Update Email (4) | Update Subscription (5) | Back to menu (6) | DELETE ACCOUNT (7)");//choose to see playlists and liked songs
+                                    System.out.println("Update Name (1) | Update Username (2) | Update Passwords (3) | Update Email (4) | Update Subscription (5) | DELETE ACCOUNT (6) | Back to menu (7)");//choose to see playlists and liked songs
                                     int setting = scanner.nextInt();
                                     scanner.nextLine();
 
@@ -164,12 +164,11 @@ public class UserMenu {
                                             Settings.updateSubscription_id(conn, updatedSubscription_id, username);
                                             break;
                                         case 6:
-                                            System.out.println("Back to menu");
-
-                                            break;
-                                        case 7:
                                             System.out.println("Delete Account!");
                                             Settings.deleteAccount(conn, username);
+                                            return;
+                                        case 7:
+                                            System.out.println("Back to menu");
                                             break;
                                         default:
                                             System.out.println("Invalid option");
