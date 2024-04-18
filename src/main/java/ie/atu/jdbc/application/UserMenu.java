@@ -111,7 +111,7 @@ public class UserMenu {
                             break;
                         case 3:
                             System.out.println("Library");//choose to see playlists and liked songs
-                            System.out.println("Liked Songs (1) | Playlists (2)");//choose to see playlists and liked songs
+                            System.out.println("Liked Songs (1) | Playlists (2) | Create Playlist (3)");//choose to see playlists and liked songs
                             int option = scanner.nextInt();
                             scanner.nextLine();
                             if(option==1){
@@ -120,10 +120,15 @@ public class UserMenu {
                             else if(option ==2){
                                 ShowPlaylist.ShowPlaylist(username,scanner);
                             }
+                            else if(option ==3){
+                                PlaylistSettings.createPlaylist(conn, scanner,getUserId(username));
+                            }
+                            else if(option == 4){
+                                PlaylistSettings.deletePlaylist(conn,username,scanner);
+                            }
                             else{
                                 System.out.println("Invalid Entry, Try again");
                             }
-
                             break;
                         case 4:
                             System.out.println("Settings");//account information, change plan
