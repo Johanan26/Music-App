@@ -81,7 +81,6 @@ public class ShowPlaylist {
             e.printStackTrace();
         }
     }
-
     public static void EditPlaylist(String playlistID, Scanner scanner) {
         System.out.println("Edit Mode ");
         System.out.println("1. Edit playlist Name\n2. add song maybe\n3. remove song\n4. delete playlist\n5. exit");
