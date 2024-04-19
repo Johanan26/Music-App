@@ -81,7 +81,6 @@ public class ShowPlaylist {
             e.printStackTrace();
         }
     }
-
     public static void EditPlaylist(String playlistID, Scanner scanner) {
         System.out.println("Edit Mode ");
         System.out.println("1. Edit playlist Name\n2. add song maybe\n3. remove song\n4. delete playlist\n5. exit");
@@ -92,6 +91,7 @@ public class ShowPlaylist {
                 ShowPlaylist.updateName(playlistID,scanner);
                 break;
             case 2:
+                ShowPlaylist.addSong(playlistID, scanner);
                 break;
             case 3:
                 removeSong(playlistID, scanner);
@@ -123,6 +123,64 @@ public class ShowPlaylist {
             e.printStackTrace();
         }
     }
+    public static void addSong(String playlistID, Scanner scanner){
+        System.out.println("What song would you like to add? ");
+        String userSearch = scanner.nextLine();
+
+        String searchSong = "SELECT songs.song_id, songs.song_name, artists.name " +
+                "FROM songs " +
+                "JOIN artists ON songs.artist_id = artists.artist_id " +
+                "WHERE (songs.song_name LIKE ? OR artists.name LIKE ?)";
+        ArrayList<Integer> songIds = new ArrayList<>();
+        ArrayList<String> results = new ArrayList<>();
+        try (Connection connection = DatabaseUtils.getConnection();
+             PreparedStatement statement = connection.prepareStatement(searchSong)) {
+            statement.setString(1, "%" + userSearch + "%");
+            statement.setString(2, "%" + userSearch + "%");
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int songID = resultSet.getInt("song_id");
+                String songName = resultSet.getString("song_name");
+                String artistName = resultSet.getString("name");
+                results.add(songName + " - " + artistName);
+                songIds.add(songID);
+            }
+            if (results.size()==0) {
+                System.out.println("No Results");
+            } else {
+                System.out.println("Results:");
+                for (int i = 0; i < results.size();i++) {
+                    System.out.println((i+1)+". "+results.get(i));
+                }
+                System.out.println("Select song to add to playlist");
+                int songChoice = scanner.nextInt();
+                scanner.nextLine();
+                if (songChoice > 0 && songChoice <= results.size()) {
+                    int selectedSongId = songIds.get(songChoice - 1);
+                    String insertSongSQL = "INSERT INTO user_playlist_songs(user_playlist_id,song_id) values (?,?)" ;
+                    try (PreparedStatement insertStatement = connection.prepareStatement(insertSongSQL)) {
+                        int userId = getPlaylistID(playlistID);
+                        if(userId != -1){
+                            insertStatement.setString(1, playlistID);
+                            insertStatement.setInt(2, selectedSongId);
+                            int addedSong = insertStatement.executeUpdate();
+                            if (addedSong > 0) {
+                                System.out.println("Song Added");
+                            } else {
+                                System.out.println("Failed to add song ");
+                            }
+                        }
+                        else{System.out.println("User not found");
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     public static void removeSong(String playlistID, Scanner scanner){
         String selectSongsSQL = "SELECT songs.song_id, songs.song_name, artists.name " +
                 "FROM user_playlist_songs " +
@@ -141,6 +199,7 @@ public class ShowPlaylist {
                 String artistName = resultSetSongs.getString("name");
                 playlistSongs.add(songName + " - " + artistName);
             }
+
             if (playlistSongs.size() == 0) {
                 System.out.println("No songs in playlist");
             } else {
@@ -199,7 +258,7 @@ public class ShowPlaylist {
 
     private static int getPlaylistID(String playlistID) throws SQLException {
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/test", "root", "password");
-        PreparedStatement stmt = conn.prepareStatement("SELECT user_playlist_id FROM user_playlist WHERE user_id = ?");
+        PreparedStatement stmt = conn.prepareStatement("SELECT user_playlist_id FROM user_playlist WHERE user_playlist_id = ?");
         stmt.setString(1, playlistID);
         ResultSet rs = stmt.executeQuery();
         if (rs.next()) {
