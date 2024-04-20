@@ -26,6 +26,26 @@ public class Home {
             e.printStackTrace();
         }
     }
+    public void showArtists() {
+        String showSongs = "SELECT artists.name " +
+                "FROM artists " +
+                "ORDER BY RAND() " +
+                "LIMIT 5";
+
+        try (Connection connection = DatabaseUtils.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(showSongs)) {
+
+            while (resultSet.next()) {
+                String artist = resultSet.getString("name");
+
+                System.out.println("> " + artist);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void showAlbums() {
         String showAlbums = "SELECT artists.name, albums.album_name " +
                 "FROM albums " +
@@ -41,10 +61,11 @@ public class Home {
                 String name = resultSet.getString("name");
                 String album = resultSet.getString("album_name");
 
-                System.out.println("Artist: " + name + ", Album: " + album);
+                System.out.println(album + " - " + name);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 }

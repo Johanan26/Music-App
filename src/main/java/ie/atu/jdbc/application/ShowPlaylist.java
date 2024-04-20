@@ -83,7 +83,7 @@ public class ShowPlaylist {
     }
     public static void EditPlaylist(String playlistID, Scanner scanner) {
         System.out.println("Edit Mode ");
-        System.out.println("1. Edit playlist Name\n2. add song maybe\n3. remove song\n4. delete playlist\n5. exit");
+        System.out.println("1. Edit playlist Name\n2. Add Song\n3. Remove song\n4. Delete playlist\n5. Exit");
         int option =scanner.nextInt();
         scanner.nextLine();
         switch (option){

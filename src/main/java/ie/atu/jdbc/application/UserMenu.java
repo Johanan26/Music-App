@@ -61,15 +61,23 @@ public class UserMenu {
                             scanner.nextLine();
                             switch (choice) {
                                 case 1:
-                                    System.out.println("Home");//shows recent playlist or a random liked song and also following
+                                    System.out.println("Home\n----");//shows recent playlist or a random liked song and also following
                                     Home home = new Home();
+
+                                    System.out.println("\nSuggested Songs:");
                                     home.showSongs();
-                                    System.out.println();//shows recent playlist or a random liked song and also following
+
+                                    System.out.println("\nSuggested Artists:");
+                                    home.showArtists();
+
+                                    System.out.println("\nSuggested Albums:");
                                     home.showAlbums();
+
                                     break;
                                 case 2:
                                     System.out.println("Search");
                                     System.out.println("What would you like to listen to? ");
+
                                     String userSearch = scanner.nextLine();
                                     SearchMenu searchMenu = new SearchMenu();
                                     ArrayList<String> results = searchMenu.searchSong(conn, scanner, userSearch);
@@ -120,8 +128,6 @@ public class UserMenu {
                                         ShowPlaylist.ShowPlaylist(username, scanner);
                                     } else if (option == 3) {
                                         PlaylistSettings.createPlaylist(conn, scanner, getUserId(username));
-                                    } else if (option == 4) {
-                                        PlaylistSettings.deletePlaylist(conn, username, scanner);
                                     } else {
                                         System.out.println("Invalid Entry, Try again");
                                     }
@@ -159,7 +165,17 @@ public class UserMenu {
                                             break;
                                         case 5:
                                             System.out.println("Change Subscription");
-                                            System.out.println("Enter your Subscription_id:");
+                                            System.out.println("Enter your new Subscription_id:");
+                                            System.out.println("--------------------------");
+                                            System.out.println("ID\t|\tType\t|\tPrice\t");
+                                            System.out.println("--------------------------");
+                                            System.out.println("1\t|\tFree\t|\t€0\t");
+                                            System.out.println("2\t|\tStudent\t|\t€5.99\t");
+                                            System.out.println("3\t|\tSolo\t|\t€10.99\t");
+                                            System.out.println("4\t|\tDuo\t\t|\t€14.99\t");
+                                            System.out.println("5\t|\tFamily\t|\t€17.99\t");
+
+
                                             String updatedSubscription_id = scanner.nextLine();
                                             Settings.updateSubscription_id(conn, updatedSubscription_id, username);
                                             break;
