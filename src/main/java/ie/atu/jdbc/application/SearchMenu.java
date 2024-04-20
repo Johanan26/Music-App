@@ -36,6 +36,7 @@ public class SearchMenu implements Search {
         return results;
     }
 
+
     public void addSongToLikes(Connection conn, int userId, String selectedSong) throws SQLException {
         String[] parts = selectedSong.split(" - "); // Split the selected song into song name and artist
         String songName = parts[0].substring(parts[0].indexOf(". ") + 2); // Extract song name

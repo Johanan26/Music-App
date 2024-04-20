@@ -18,21 +18,36 @@ public class SignUp extends User {
             System.out.println("Enter name:");
             String name = scanner.nextLine();
             details.add("Name:"+name);
+
             System.out.println("Enter username:");
             String username = scanner.nextLine();
             details.add("Username:"+username);
+
             System.out.println("Enter email:");
             String email = scanner.nextLine();
             details.add("Email:"+email);
+
             System.out.println("Enter password:");
             String password = scanner.nextLine();
             details.add("Password:"+password);
+
             System.out.println("Enter subscription_id:");
+            System.out.println("--------------------------");
+            System.out.println("ID\t|\tType\t|\tPrice\t");
+            System.out.println("--------------------------");
+            System.out.println("1\t|\tFree\t|\t€0\t");
+            System.out.println("2\t|\tStudent\t|\t€5.99\t");
+            System.out.println("3\t|\tSolo\t|\t€10.99\t");
+            System.out.println("4\t|\tDuo\t\t|\t€14.99\t");
+            System.out.println("5\t|\tFamily\t|\t€17.99\t");
+
             String subscriptionId = scanner.nextLine();
             details.add("Subscription:"+subscriptionId);
+
             System.out.println("Enter gender:");
             String gender = scanner.nextLine();
             details.add("Gender:"+ gender);
+
             System.out.println("Enter country:");
             String country = scanner.nextLine();
             details.add("Country:"+ country);
